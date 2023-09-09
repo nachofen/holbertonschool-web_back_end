@@ -7,6 +7,16 @@ import math
 from typing import List
 
 
+def index_range(page: int, page_size: int):
+    """ return a tuple of size two containing a start index and an end index
+    corresponding to the range of indexes to return in a list for those
+    particular pagination parameters."""
+    starting_index = (page - 1) * page_size
+    ending_index = starting_index + page_size
+    result = (starting_index, ending_index)
+    return result
+
+
 class Server:
     """Server class to paginate a database of popular baby names.
     """
@@ -26,7 +36,6 @@ class Server:
 
         return self.__dataset
 
-
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Use assert to verify that both arguments are integers greater than 0
         Use index_range to find the correct indexes to paginate the dataset
@@ -34,21 +43,10 @@ class Server:
         (i.e. the correct list of rows).
         If the input arguments are out of range for the dataset, an
         empty list should be returned."""
-        assert page > 0
-        assert page_size > 0
-        dataset = self.dataset
+        assert isinstance(page, int) and page > 0
+        assert isinstance(page_size, int) and page_size > 0
+        dataset = self.dataset()
         start, end = index_range(page, page_size)
         if start > len(dataset):
             return []
         return dataset[start:end]
-
-
-
-def index_range(page: int, page_size: int):
-    """ return a tuple of size two containing a start index and an end index
-    corresponding to the range of indexes to return in a list for those
-    particular pagination parameters."""
-    starting_index = (page - 1) * page_size
-    ending_index = starting_index + page_size
-    result = (starting_index, ending_index)
-    return result
